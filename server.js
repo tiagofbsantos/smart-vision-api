@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const morgan = require('morgan');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
@@ -11,14 +12,12 @@ const image = require('./controllers/image');
 
 const db = knex({
 	client: 'pg',
-  	connection: {
-    	connectionString : process.env.DATABASE_URL,
-    	ssl: true
-	}
+  	connection: process.env.POSTGRES_URI
 });
 
 const app = express();
 
+app.use(morgan('combined'))
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -29,4 +28,4 @@ app.get('/profile/:id', profile.handleProfileGet(db))
 app.put('/image', image.handleImage(db))
 app.post('/imageurl', image.handleApiCall())
 
-app.listen(process.env.PORT || 3005, () => console.log(`app is running on port ${process.env.PORT}`))
+app.listen(3005, () => console.log(`app is running on port 3005`))

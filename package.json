@@ -4,7 +4,7 @@
   "description": "The API of the smart-vision web app",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.20.10",
+    "morgan": "^1.9.1",
     "pg": "^7.18.2"
   },
   "devDependencies": {
