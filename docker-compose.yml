@@ -1,6 +1,7 @@
-version: '3.7'
+version: "3.7"
 
 services:
+
   # Backedn API
   smart-vision-api:
     container_name: backend
@@ -8,18 +9,28 @@ services:
     command: npm start
     working_dir: /usr/src/smart-vision-api
     environment:
-      POSTGRES_URI: psql postgres://tiago:secret@postgres:5432/smart-vision-docker
+      POSTGRES_URI: postgres://tiago:secret@postgres:5432/smart-vision-docker
+      REDIS_URI: redis://redis:6379
     ports:
       - "3005:3005"
     volumes:
       - ./:/usr/src/smart-vision-api
-  #Postgres
+      
+  # Postgres
   postgres:
+    container_name: postgres
     environment:
       POSTGRES_USER: tiago
       POSTGRES_PASSWORD: secret
+      POSTGRES_URL: postgres://tiago:secret@localhost:5432/smart-vision-docker
       POSTGRES_DB: smart-vision-docker
       POSTGRES_HOST: postgres
     build: ./postgres
     ports:
-      - "1234:5432"
+      - "5432:5432"
+  # Redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
