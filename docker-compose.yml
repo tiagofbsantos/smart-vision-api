@@ -1,36 +1,44 @@
 version: "3.7"
 
 services:
-
-  # Backedn API
-  smart-vision-api:
-    container_name: backend
-    build: ./
-    command: npm start
-    working_dir: /usr/src/smart-vision-api
-    environment:
-      POSTGRES_URI: postgres://tiago:secret@postgres:5432/smart-vision-docker
-      REDIS_URI: redis://redis:6379
-    ports:
-      - "3005:3005"
-    volumes:
-      - ./:/usr/src/smart-vision-api
-      
-  # Postgres
-  postgres:
-    container_name: postgres
-    environment:
-      POSTGRES_USER: tiago
-      POSTGRES_PASSWORD: secret
-      POSTGRES_URL: postgres://tiago:secret@localhost:5432/smart-vision-docker
-      POSTGRES_DB: smart-vision-docker
-      POSTGRES_HOST: postgres
-    build: ./postgres
-    ports:
-      - "5432:5432"
   # Redis
   redis:
     container_name: redis
     image: redis
     ports:
       - "6379:6379"
+
+  # Postgres
+  postgres:
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_URL: postgres://postgres:secret@localhost:5432/smart-vision-api-postgres
+      POSTGRES_DB: smart-vision-api-postgres
+      POSTGRES_HOST: postgres
+    build: ./postgres
+    ports:
+      - "5432:5432"
+
+  # Smart-Vision API
+  smart-vision-api:
+    container_name: smart-vision-api
+    build: ./
+    command: npm start
+    working_dir: /var/app/current/
+    environment:
+      POSTGRES_URI: postgres://postgres:secret@postgres:5432/smart-vision-api-postgres
+      REDIS_URI: redis://redis:6379
+      API_CLARIFAI: "c09b3360972c4117b422da0bcda07fc8"
+      JWTSECRET: "JWT_SECRET_KEY"
+      PORT: 3005
+
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./:/var/app/current/
+      - smart-vision-api_node_modules:/var/app/current/node_modules
+
+volumes:
+  smart-vision-api_node_modules:

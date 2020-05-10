@@ -1,9 +1,14 @@
-FROM node:12.16.1
+FROM node:12.16.3
 
-WORKDIR /usr/src/smart-vision-api
+# set a directory for the app
+WORKDIR /var/app/current/
 
+# install dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# copy all the files to the container
 COPY ./ ./
 
-RUN npm install
-
+# run the command
 CMD ["/bin/bash"]
