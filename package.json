@@ -1,26 +1,22 @@
 {
   "name": "smart-vision-api",
   "version": "1.0.0",
+  "private": true,
   "description": "The API of the smart-vision web app",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tiagofbsantos/smart-vision-api.git"
   },
-  "author": "",
+  "author": "https://www.tiagofbsantos.com/",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/tiagofbsantos/smart-vision-api/issues"
   },
-  "homepage": "https://github.com/tiagofbsantos/smart-vision-api#readme",
+  "homepage": "https://smartvision.tiagofbsantos.com/",
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.19.0",
@@ -32,10 +28,5 @@
     "morgan": "^1.10.0",
     "pg": "^7.18.2",
     "redis": "^3.0.2"
-  },
-  "devDependencies": {
-    "husky": "^4.2.5",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1"
   }
 }
