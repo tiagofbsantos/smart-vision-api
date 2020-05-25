@@ -3,6 +3,7 @@ BEGIN TRANSACTION;
 CREATE TABLE users (
 	id serial PRIMARY KEY,
 	name VARCHAR(100),
+	avatar VARCHAR(500),
 	email text UNIQUE NOT NULL,
 	entries BIGINT DEFAULT 0,
 	joined TIMESTAMP NOT NULL

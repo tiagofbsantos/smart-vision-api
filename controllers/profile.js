@@ -12,10 +12,11 @@ const handleProfileGet = db => (req, res) => {
 
 const handleProfileUpdate = db => (req, res) => {
   const { id } = req.params;
-  const { name, age, pet } = req.body.formInput;
+  const { name, avatar } = req.body.formInput;
   db("users")
     .where({ id })
     .update({ name })
+    .update({ avatar })
     .then(resp => {
       if (resp) res.json("success");
       else res.status(400).json("Unable to update");
