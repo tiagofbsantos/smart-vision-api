@@ -22,7 +22,7 @@ class SessionService {
   }
 
   async setToken(token: string, id: string) {
-    return Promise.resolve(redisClient.set(token, id));
+    return await redisClient.set(token, id);
   }
 }
 
