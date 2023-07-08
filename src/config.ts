@@ -9,6 +9,7 @@ const redisURI = process.env.REDIS_URI || "redis://localhost:6379";
 
 const clarifaiApiKey = process.env.CLARIFAI_API_KEY;
 const jwtSecret = process.env.JWT_SECRET || "";
+const clarifaiModel = process.env.CLARIFAI_MODEL || "";
 
 export default {
   port,
@@ -17,5 +18,6 @@ export default {
   redisURI,
 
   clarifaiApiKey,
-  jwtSecret
+  jwtSecret,
+  clarifaiModel
 };

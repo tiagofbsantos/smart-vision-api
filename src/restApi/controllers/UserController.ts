@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import Clarifai from "clarifai";
 import bcrypt from "bcrypt";
 
 import postgresClient from "../../databaseClients/postgresClient";
@@ -8,6 +7,7 @@ import userService from "../../services/userService";
 import sessionService from "../../services/sessionService";
 import ApiError from "../ApiError";
 import User from "../../models/Credential";
+import config from "../../config";
 
 export const signinAuthentication = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -110,7 +110,7 @@ export const handleProfileUpdate = async (req: Request, res: Response, next: Nex
 export const handleApiCall = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await clarifaiApi.models
-      .predict(Clarifai.FACE_DETECT_MODEL, req.body.input);
+      .predict(config.clarifaiModel, req.body.input);
 
     res.json(data);
   } catch (error) {
