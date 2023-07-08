@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import bcrypt from "bcrypt-nodejs";
 import cors from "cors";
 import morgan from "morgan";
 
@@ -20,8 +19,8 @@ import config from "./config";
 
     app.get("/", (req, res) => res.send("It is working!"));
 
-    app.post("/signin", UserController.signinAuthentication(bcrypt));
-    app.post("/register", UserController.handleRegister(bcrypt));
+    app.post("/signin", UserController.signinAuthentication);
+    app.post("/register", UserController.handleRegister);
 
     const securityMiddlewares = createAuthorizedOnlySecurityMiddlewares();
 

@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import postgresClient from "../databaseClients/postgresClient";
 import redisClient from "../databaseClients/redisClient";
 import ApiError from "../restApi/ApiError";
@@ -15,7 +16,7 @@ class UserService {
     }
   }
 
-  async handleSignin(bcrypt, email: string, password: string) {
+  async handleSignin(email: string, password: string) {
     if (!email || !password) throw new ApiError("incorrect_form_submission");
 
     const login = await postgresClient

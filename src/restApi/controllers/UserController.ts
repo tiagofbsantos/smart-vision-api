@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Clarifai from "clarifai";
+import bcrypt from "bcrypt";
 
 import postgresClient from "../../databaseClients/postgresClient";
 import clarifaiApi from "../../apiClients/clarifaiApi";
@@ -8,7 +9,7 @@ import sessionService from "../../services/sessionService";
 import ApiError from "../ApiError";
 import User from "../../models/Credential";
 
-export const signinAuthentication = (bcrypt) => async (req: Request, res: Response, next: NextFunction) => {
+export const signinAuthentication = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { authorization } = req.headers;
     const { email, password } = req.body;
@@ -18,7 +19,7 @@ export const signinAuthentication = (bcrypt) => async (req: Request, res: Respon
     if (authorization) {
       session = await userService.getAuthTokenId(authorization);
     } else {
-      const user = await userService.handleSignin(bcrypt, email, password);
+      const user = await userService.handleSignin(email, password);
 
       if (!user) throw new ApiError("user_not_found");
       if (!user.id || !user.email) throw new ApiError("email_invalid");
@@ -33,13 +34,14 @@ export const signinAuthentication = (bcrypt) => async (req: Request, res: Respon
   }
 };
 
-export const handleRegister = (bcrypt) => async (req: Request, res: Response, next: NextFunction) => {
+export const handleRegister = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, name, password } = req.body;
 
     if (!email || !name || !password) throw new ApiError("incorrect_form_submission");
 
-    const hash = bcrypt.hashSync(password);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
 
     await postgresClient.transaction(async trx => {
       const loginEmail = await trx
