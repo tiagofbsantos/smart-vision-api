@@ -4,7 +4,7 @@ import redisClient from "../databaseClients/redisClient";
 import ApiError from "../restApi/ApiError";
 
 class UserService {
-  async getAuthTokenId(authorization) {
+  async getAuthTokenId(authorization: string) {
     try {
       const session = await redisClient.get(authorization);
 

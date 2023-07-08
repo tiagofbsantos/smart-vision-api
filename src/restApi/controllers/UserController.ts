@@ -14,7 +14,7 @@ export const signinAuthentication = async (req: Request, res: Response, next: Ne
     const { authorization } = req.headers;
     const { email, password } = req.body;
 
-    let session;
+    let session: Object;
 
     if (authorization) {
       session = await userService.getAuthTokenId(authorization);

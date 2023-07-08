@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 
 import redisClient from "../databaseClients/redisClient";
+import User from "../models/User";
 import config from "../config";
 
 class SessionService {
-  async createSession(user) {
+  async createSession(user: User) {
     const { email, id } = user;
 
     const token = this.signToken(email);
@@ -14,13 +15,13 @@ class SessionService {
     return { success: "true", userData: id, token, user };
   }
 
-  signToken(email) {
+  signToken(email: string) {
     const jwtPayload = { email };
 
     return jwt.sign(jwtPayload, config.jwtSecret, { expiresIn: "2 days" });
   }
 
-  async setToken(token, id) {
+  async setToken(token: string, id: string) {
     return Promise.resolve(redisClient.set(token, id));
   }
 }

@@ -4,5 +4,5 @@ export default interface User {
   avatar?: string;
   email: string;
   entries?: number;
-  joined: Date;
+  joined?: Date;
 };
