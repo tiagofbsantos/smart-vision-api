@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import Clarifai from "clarifai";
 
 import postgresClient from "../../databaseClients/postgresClient";
@@ -8,7 +8,7 @@ import sessionService from "../../services/sessionService";
 import ApiError from "../ApiError";
 import User from "../../models/Credential";
 
-export const signinAuthentication = (bcrypt) => async (req: Request, res: Response) => {
+export const signinAuthentication = (bcrypt) => async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { authorization } = req.headers;
     const { email, password } = req.body;
@@ -29,10 +29,11 @@ export const signinAuthentication = (bcrypt) => async (req: Request, res: Respon
     res.json(session);
   } catch (error) {
     res.status(400).json(error);
+    next(error);
   }
 };
 
-export const handleRegister = (bcrypt) => async (req: Request, res: Response) => {
+export const handleRegister = (bcrypt) => async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, name, password } = req.body;
 
@@ -64,12 +65,12 @@ export const handleRegister = (bcrypt) => async (req: Request, res: Response) =>
       }
     });
   } catch (error) {
-    console.error(error);
     res.status(400).json("unable to register");
+    next(error);
   }
 }
 
-export const handleProfileGet = async (req: Request, res: Response) => {
+export const handleProfileGet = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
 
@@ -82,10 +83,11 @@ export const handleProfileGet = async (req: Request, res: Response) => {
     else res.status(400).json("Not found");
   } catch (error) {
     res.status(400).json("error getting user");
+    next(error);
   }
 };
 
-export const handleProfileUpdate = async (req: Request, res: Response) => {
+export const handleProfileUpdate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { name, avatar } = req.body.formInput;
@@ -97,24 +99,25 @@ export const handleProfileUpdate = async (req: Request, res: Response) => {
 
     if (response) res.json("success");
     else res.status(400).json("Unable to update");
-  } catch (err) {
-    res.status(400).json("error updating user")
+  } catch (error) {
+    res.status(400).json("error updating user");
+    next(error);
   }
 };
 
-export const handleApiCall = async (req: Request, res: Response) => {
+export const handleApiCall = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await clarifaiApi.models
       .predict(Clarifai.FACE_DETECT_MODEL, req.body.input);
 
     res.json(data);
   } catch (error) {
-    console.error(error);
     res.status(400).json("unable to work with API");
+    next(error);
   }
 };
 
-export const handleImage = async (req: Request, res: Response) => {
+export const handleImage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.body;
 
@@ -126,5 +129,6 @@ export const handleImage = async (req: Request, res: Response) => {
     res.json(entries[0].entries);
   } catch (error) {
     res.status(400).json("unable to get entries");
+    next(error);
   }
 };
