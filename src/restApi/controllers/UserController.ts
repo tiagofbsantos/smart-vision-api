@@ -26,20 +26,20 @@ export const signinAuthentication = (bcrypt) => async (req: Request, res: Respon
       session = await sessionService.createSession(user);
     }
 
-    return res.json(session);
-  } catch (err) {
-    res.status(400).json(err);
+    res.json(session);
+  } catch (error) {
+    res.status(400).json(error);
   }
 };
 
 export const handleRegister = (bcrypt) => async (req: Request, res: Response) => {
-  const { email, name, password } = req.body;
-
-  if (!email || !name || !password) throw new ApiError("incorrect_form_submission");
-
-  const hash = bcrypt.hashSync(password);
-
   try {
+    const { email, name, password } = req.body;
+
+    if (!email || !name || !password) throw new ApiError("incorrect_form_submission");
+
+    const hash = bcrypt.hashSync(password);
+
     await postgresClient.transaction(async trx => {
       const loginEmail = await trx
         .insert({ hash, email })
@@ -59,7 +59,9 @@ export const handleRegister = (bcrypt) => async (req: Request, res: Response) =>
         sessionService.createSession(user).then(session =>
           res.json(session)
         );
-      } else return res.status(400).json(user);
+      } else {
+        res.status(400).json(user);
+      }
     });
   } catch (error) {
     console.error(error);
@@ -76,8 +78,8 @@ export const handleProfileGet = async (req: Request, res: Response) => {
       .from("users")
       .where({ id });
 
-    if (users.length) return res.json(users[0]);
-    else return res.status(400).json("Not found");
+    if (users.length) res.json(users[0]);
+    else res.status(400).json("Not found");
   } catch (error) {
     res.status(400).json("error getting user");
   }
@@ -105,7 +107,7 @@ export const handleApiCall = async (req: Request, res: Response) => {
     const data = await clarifaiApi.models
       .predict(Clarifai.FACE_DETECT_MODEL, req.body.input);
 
-    return res.json(data);
+    res.json(data);
   } catch (error) {
     console.error(error);
     res.status(400).json("unable to work with API");
@@ -121,7 +123,7 @@ export const handleImage = async (req: Request, res: Response) => {
       .increment("entries", 1)
       .returning("entries");
 
-    return res.json(entries[0].entries);
+    res.json(entries[0].entries);
   } catch (error) {
     res.status(400).json("unable to get entries");
   }
