@@ -1,11 +1,12 @@
 {
   "name": "smart-vision-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "The API of the smart-vision web app",
-  "main": "server.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon",
+    "build": "npx rimraf ./dist && tsc"
   },
   "repository": {
     "type": "git",
@@ -18,15 +19,29 @@
   },
   "homepage": "https://smartvision.tiagofbsantos.com/",
   "dependencies": {
-    "bcrypt-nodejs": "^0.0.3",
-    "body-parser": "^1.19.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
     "clarifai": "^2.9.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.20.15",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
+    "knex": "^2.4.2",
     "morgan": "^1.10.0",
-    "pg": "^7.18.2",
-    "redis": "^3.0.2"
+    "pg": "^8.11.1",
+    "redis": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^20.4.0",
+    "@types/pg": "^8.10.2",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
