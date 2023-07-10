@@ -46,7 +46,7 @@ export const handleRegister = async (req: Request, res: Response, next: NextFunc
     await postgresClient.transaction(async trx => {
       const loginEmail = await trx
         .insert({ hash, email })
-        .into("login")
+        .into("credentials")
         .returning("email");
 
       const users: User[] = await trx("users")

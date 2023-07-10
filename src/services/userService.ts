@@ -19,12 +19,12 @@ class UserService {
   async handleSignin(email: string, password: string) {
     if (!email || !password) throw new ApiError("incorrect_form_submission");
 
-    const login = await postgresClient
+    const credentials = await postgresClient
       .select("hash", "email")
-      .from("login")
+      .from("credentials")
       .where("email", "=", email);
 
-    const isValid = bcrypt.compareSync(password, login[0].hash);
+    const isValid = bcrypt.compareSync(password, credentials[0].hash);
     if (!isValid) throw new ApiError("wrong_credentials");
 
     const users = await postgresClient
