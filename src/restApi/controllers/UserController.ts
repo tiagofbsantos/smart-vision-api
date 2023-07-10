@@ -59,9 +59,8 @@ export const handleRegister = async (req: Request, res: Response, next: NextFunc
 
       const user = users[0];
       if (user.id && user.email) {
-        sessionService.createSession(user).then(session =>
-          res.json(session)
-        );
+        const session = await sessionService.createSession(user);
+        res.json(session);
       } else {
         res.status(400).json(user);
       }
